@@ -58,7 +58,7 @@ export default function PredictiveAnalyticsPage() {
             </div>
           </motion.div>
           <motion.h1 className="mt-6 max-w-5xl text-4xl font-bold leading-tight text-white md:text-6xl" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.05 }}>
-            Advanced <GradientText>Predictive</GradientText> Analytics
+            Advanced <GradientText>Regression</GradientText> Analytics
           </motion.h1>
           <motion.p className="mt-4 max-w-2xl text-white/70" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.1 }}>
             Unlock the power of machine learning with our cutting-edge predictive models for forecasting and pattern recognition.
@@ -113,6 +113,18 @@ export default function PredictiveAnalyticsPage() {
             <CardContent>
               <h4 className="text-lg font-semibold text-white">💰 Finance & Insurance</h4>
               <p className="mt-2 text-white/70 text-sm">Better risk modeling, smarter resource allocation, compliance confidence.</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent>
+              <h4 className="text-lg font-semibold text-white">🚀 New Product & Innovation</h4>
+              <p className="mt-2 text-white/70 text-sm">Market sizing, pricing tests, adoption modeling for successful launches.</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent>
+              <h4 className="text-lg font-semibold text-white">🎮 Gaming & Entertainment</h4>
+              <p className="mt-2 text-white/70 text-sm">Player LTV, retention, content recommendations for engaging experiences.</p>
             </CardContent>
           </Card>
         </div>
@@ -176,12 +188,12 @@ export default function PredictiveAnalyticsPage() {
           <h3 className="text-3xl font-bold">Ready to <GradientText>Predict</GradientText> Your Future?</h3>
           <p className="mt-3 text-white/70">Get started with our advanced predictive analytics and unlock the hidden patterns in your data.</p>
           <div className="mt-6 flex items-center justify-center gap-3">
-            <button className="inline-flex items-center justify-center px-6 py-3 text-base font-medium bg-indigo-600 text-white rounded-2xl hover:bg-indigo-500 transition-colors">
+            <Link to="/contact" className="inline-flex items-center justify-center px-6 py-3 text-base font-medium bg-indigo-600 text-white rounded-2xl hover:bg-indigo-500 transition-colors">
               <BarChart3 className="mr-2 h-5 w-5" /> Start Analysis
-            </button>
-            <button className="inline-flex items-center justify-center px-6 py-3 text-base font-medium bg-white/10 text-white rounded-2xl hover:bg-white/20 transition-colors">
+            </Link>
+            <Link to="/case-studies" className="inline-flex items-center justify-center px-6 py-3 text-base font-medium bg-white/10 text-white rounded-2xl hover:bg-white/20 transition-colors">
               <ArrowRight className="mr-2 h-5 w-5" /> Learn More
-            </button>
+            </Link>
           </div>
         </div>
       </section>

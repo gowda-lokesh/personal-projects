@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ShoppingCart, TrendingUp, CheckCircle2, ArrowRight, Target, Users, Brain, Zap } from "lucide-react";
+import { ShoppingCart, TrendingUp, CheckCircle2, ArrowRight } from "lucide-react";
 
 const GradientText = ({ children }) => (
   <span className="bg-gradient-to-r from-indigo-400 via-violet-400 to-fuchsia-400 bg-clip-text text-transparent">{children}</span>
@@ -15,29 +15,20 @@ const CardContent = ({ className = "", children }) => (
   <div className={`p-6 ${className}`}>{children}</div>
 );
 
-const Feature = ({ icon: Icon, title, desc, features }) => (
-  <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
-    <Card className="group relative h-full overflow-hidden p-0">
-      <div className="absolute -inset-1 rounded-3xl bg-gradient-to-tr from-indigo-500/20 via-fuchsia-500/20 to-blue-500/20 opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100" />
-      <CardContent className="relative z-10">
-        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/10">
-          <Icon className="h-6 w-6 text-white" />
-        </div>
-        <h3 className="mt-4 text-xl font-semibold text-white">{title}</h3>
-        <p className="mt-2 text-sm text-white/70">{desc}</p>
-        {features && (
-          <ul className="mt-4 space-y-2">
-            {features.map((feature, index) => (
-              <li key={index} className="flex items-center gap-2 text-xs text-white/60">
-                <CheckCircle2 className="h-3 w-3 text-green-400" />
-                {feature}
-              </li>
-            ))}
-          </ul>
-        )}
-      </CardContent>
-    </Card>
-  </motion.div>
+const Feature = ({ title, points }) => (
+  <Card>
+    <CardContent>
+      <h4 className="text-lg font-semibold text-white">{title}</h4>
+      <ul className="mt-3 space-y-2">
+        {points.map((p, i) => (
+          <li key={i} className="flex items-start gap-2 text-sm text-white/70">
+            <CheckCircle2 className="mt-0.5 h-4 w-4 text-green-400" />
+            <span>{p}</span>
+          </li>
+        ))}
+      </ul>
+    </CardContent>
+  </Card>
 );
 
 export default function EcommerceAnalyticsPage() {
@@ -66,142 +57,34 @@ export default function EcommerceAnalyticsPage() {
         </div>
       </section>
 
-      {/* Services Overview */}
+      {/* Verticals Section */}
       <section className="mx-auto max-w-7xl px-6 py-16">
         <div className="mx-auto max-w-3xl text-center">
-          <h2 className="text-3xl font-bold md:text-4xl">Our <GradientText>E-commerce</GradientText> Solutions</h2>
-          <p className="mt-3 text-white/70">Comprehensive analytics and insights to drive your online business growth and profitability.</p>
+          <h2 className="text-3xl font-bold md:text-4xl">How <GradientText>E‑commerce Analytics</GradientText> Drives Value Across Verticals</h2>
         </div>
-        
-        <div className="mt-10 grid gap-6 md:grid-cols-2">
-          <Feature 
-            icon={ShoppingCart} 
-            title="Customer Analytics" 
-            desc="Deep insights into customer behavior, purchase patterns, and lifetime value to optimize your marketing strategies."
-            features={[
-              "Customer segmentation and profiling",
-              "Purchase behavior analysis",
-              "Lifetime value calculation",
-              "Churn prediction and prevention"
-            ]}
-          />
-          <Feature 
-            icon={TrendingUp} 
-            title="Sales Optimization" 
-            desc="Advanced analytics to optimize product performance, pricing strategies, and conversion rates."
-            features={[
-              "Product performance analysis",
-              "Dynamic pricing optimization",
-              "Conversion rate optimization",
-              "Inventory management insights"
-            ]}
-          />
+        <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <Feature title="Retail & Fashion" points={["Predict demand trends", "Optimize assortments", "Reduce stockouts"]} />
+          <Feature title="Consumer Electronics" points={["Track product performance", "Dynamic pricing", "Improve upsell/cross‑sell"]} />
+          <Feature title="Food & Grocery" points={["Manage inventory freshness", "Optimize delivery routes", "Forecast demand"]} />
+          <Feature title="Digital Products & Subscriptions" points={["Reduce churn", "Personalize offers", "Maximize recurring revenue"]} />
+          <Feature title="Health & Wellness" points={["Tailored campaigns", "Compliance‑ready reporting", "Loyalty tracking"]} />
+          <Feature title="Marketplaces & Platforms" points={["Seller performance insights", "Buyer segmentation", "Fraud detection"]} />
         </div>
       </section>
 
-      {/* Analytics Dashboard Preview */}
-      <section className="mx-auto max-w-7xl px-6 py-16">
-        <div className="mx-auto max-w-3xl text-center">
-          <h3 className="text-2xl font-semibold md:text-3xl">E-commerce <GradientText>Dashboard</GradientText></h3>
-          <p className="mt-3 text-white/70">Real-time metrics and insights to track your online store performance.</p>
-        </div>
-        
-        <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-          <Card>
-            <CardContent>
-              <div className="flex items-center gap-3 mb-4">
-                <TrendingUp className="h-6 w-6 text-green-400" />
-                <h4 className="text-lg font-semibold text-white">Revenue</h4>
-              </div>
-              <div className="text-3xl font-bold text-green-400">$127K</div>
-              <p className="text-sm text-white/60 mt-2">+18% vs last month</p>
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardContent>
-              <div className="flex items-center gap-3 mb-4">
-                <ShoppingCart className="h-6 w-6 text-blue-400" />
-                <h4 className="text-lg font-semibold text-white">Orders</h4>
-              </div>
-              <div className="text-3xl font-bold text-blue-400">2,847</div>
-              <p className="text-sm text-white/60 mt-2">+12% growth</p>
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardContent>
-              <div className="flex items-center gap-3 mb-4">
-                <Target className="h-6 w-6 text-yellow-400" />
-                <h4 className="text-lg font-semibold text-white">Conversion Rate</h4>
-              </div>
-              <div className="text-3xl font-bold text-yellow-400">3.2%</div>
-              <p className="text-sm text-white/60 mt-2">+0.5% improvement</p>
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardContent>
-              <div className="flex items-center gap-3 mb-4">
-                <Users className="h-6 w-6 text-purple-400" />
-                <h4 className="text-lg font-semibold text-white">Avg. Order Value</h4>
-              </div>
-              <div className="text-3xl font-bold text-purple-400">$89</div>
-              <p className="text-sm text-white/60 mt-2">+$12 increase</p>
-            </CardContent>
-          </Card>
-        </div>
-      </section>
+      
 
-      {/* Key Features */}
-      <section className="mx-auto max-w-7xl px-6 py-16">
-        <div className="grid items-center gap-10 md:grid-cols-2">
-          <div>
-            <h3 className="text-2xl font-semibold md:text-3xl">Advanced <GradientText>E-commerce</GradientText> Features</h3>
-            <p className="mt-3 text-white/70">Our comprehensive e-commerce analytics platform provides deep insights into your online business.</p>
-            <ul className="mt-6 space-y-3 text-white/80">
-              <li className="flex items-center gap-3">
-                <Target className="h-5 w-5 text-green-400" />
-                <span>Real-time sales and traffic monitoring</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <Zap className="h-5 w-5 text-blue-400" />
-                <span>Automated A/B testing and optimization</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <Brain className="h-5 w-5 text-purple-400" />
-                <span>AI-powered product recommendations</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <ShoppingCart className="h-5 w-5 text-yellow-400" />
-                <span>Cart abandonment analysis and recovery</span>
-              </li>
-            </ul>
-          </div>
-          <div className="space-y-4">
-            <Card>
-              <CardContent>
-                <h4 className="text-lg font-semibold text-white">Analytics Coverage</h4>
-                <div className="mt-4 space-y-3">
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-400" />
-                    <span className="text-white/70">Website traffic and user behavior</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-400" />
-                    <span className="text-white/70">Sales funnel and conversion tracking</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-400" />
-                    <span className="text-white/70">Product performance and inventory</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-400" />
-                    <span className="text-white/70">Marketing campaign effectiveness</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+      
+      {/* Why Choose Us */}
+      <section className="mx-auto max-w-7xl px-6 py-8">
+        <div className="mx-auto max-w-3xl text-center">
+          <h3 className="text-2xl font-semibold md:text-3xl">Why <GradientText>Choose Us</GradientText>?</h3>
+          <div className="mt-6 grid gap-3 text-left md:grid-cols-2">
+            <div className="flex items-start gap-3 text-white/80"><span className="text-indigo-400">⚡</span><span>Deep Customer Understanding – Hidden patterns in behavior, purchases, and retention.</span></div>
+            <div className="flex items-start gap-3 text-white/80"><span className="text-indigo-400">⚡</span><span>Profit‑Driven Optimization – Improve conversion, sales, and lifetime value.</span></div>
+            <div className="flex items-start gap-3 text-white/80"><span className="text-indigo-400">⚡</span><span>Scalable Frameworks – Flexible analytics that grow with your store.</span></div>
+            <div className="flex items-start gap-3 text-white/80"><span className="text-indigo-400">⚡</span><span>Real‑Time Metrics – Dashboards for instant decisions and performance tracking.</span></div>
+            <div className="flex items-start gap-3 text-white/80 md:col-span-2"><span className="text-indigo-400">⚡</span><span>End‑to‑End Coverage – From acquisition to retention, we optimize every step.</span></div>
           </div>
         </div>
       </section>
@@ -216,9 +99,9 @@ export default function EcommerceAnalyticsPage() {
             <Link to="/contact" className="inline-flex items-center justify-center px-6 py-3 text-base font-medium bg-indigo-600 text-white rounded-2xl hover:bg-indigo-500 transition-colors">
               <ShoppingCart className="mr-2 h-5 w-5" /> Start Optimizing
             </Link>
-            <button className="inline-flex items-center justify-center px-6 py-3 text-base font-medium bg-white/10 text-white rounded-2xl hover:bg-white/20 transition-colors">
+            <Link to="/case-studies" className="inline-flex items-center justify-center px-6 py-3 text-base font-medium bg-white/10 text-white rounded-2xl hover:bg-white/20 transition-colors">
               <ArrowRight className="mr-2 h-5 w-5" /> Learn More
-            </button>
+            </Link>
           </div>
         </div>
       </section>

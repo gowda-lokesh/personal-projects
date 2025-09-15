@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Test - Vishnu Labs</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0b0b13;
+            color: white;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .test-section {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .test-button {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .test-button:hover {
+            background: linear-gradient(135deg, #5b21b6, #7c3aed);
+        }
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        .success {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: #86efac;
+        }
+        .error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+        }
+        .info {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: #93c5fd;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 System Test Dashboard</h1>
+        
+        <div class="test-section">
+            <h3>📊 Database Test</h3>
+            <button class="test-button" onclick="testDatabase()">Test Database Connection</button>
+            <button class="test-button" onclick="addTestContact()">Add Test Contact</button>
+            <button class="test-button" onclick="viewContacts()">View All Contacts</button>
+            <div id="databaseResult" class="result" style="display: none;"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>🔐 Authentication Test</h3>
+            <button class="test-button" onclick="testLogin()">Test Login</button>
+            <button class="test-button" onclick="testProtectedRoute()">Test Protected Route</button>
+            <div id="authResult" class="result" style="display: none;"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>📧 Email Test</h3>
+            <button class="test-button" onclick="testEmail()">Test Email Configuration</button>
+            <div id="emailResult" class="result" style="display: none;"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>🌐 Quick Links</h3>
+            <a href="/login" class="test-button" style="text-decoration: none; display: inline-block;">Login Page</a>
+            <a href="/admin" class="test-button" style="text-decoration: none; display: inline-block;">Admin Dashboard</a>
+            <a href="http://localhost:5173/contact" class="test-button" style="text-decoration: none; display: inline-block;">Contact Form</a>
+        </div>
+    </div>
+
+    <script>
+        let authToken = null;
+        
+        function showResult(elementId, message, type = 'info') {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.className = `result ${type}`;
+            element.style.display = 'block';
+        }
+        
+        async function testDatabase() {
+            try {
+                const response = await fetch('/api/health');
+                const data = await response.json();
+                showResult('databaseResult', `✅ Database Health: ${JSON.stringify(data, null, 2)}`, 'success');
+            } catch (error) {
+                showResult('databaseResult', `❌ Database Error: ${error.message}`, 'error');
+            }
+        }
+        
+        async function addTestContact() {
+            try {
+                const testData = {
+                    name: `Test User ${Date.now()}`,
+                    email: `test${Date.now()}@example.com`,
+                    company: 'Test Company',
+                    message: 'This is a test contact submission'
+                };
+                
+                const response = await fetch('/api/contact', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(testData)
+                });
+                
+                const data = await response.json();
+                showResult('databaseResult', `✅ Contact Added: ${JSON.stringify(data, null, 2)}`, 'success');
+            } catch (error) {
+                showResult('databaseResult', `❌ Contact Error: ${error.message}`, 'error');
+            }
+        }
+        
+        async function viewContacts() {
+            try {
+                if (!authToken) {
+                    showResult('databaseResult', '⚠️ Please login first to view contacts', 'error');
+                    return;
+                }
+                
+                const response = await fetch(`/api/contacts?token=${authToken}`);
+                const data = await response.json();
+                showResult('databaseResult', `📋 Contacts (${data.length} total): ${JSON.stringify(data, null, 2)}`, 'info');
+            } catch (error) {
+                showResult('databaseResult', `❌ Contacts Error: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testLogin() {
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: 'loki', password: 'admin@123' })
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    authToken = data.token;
+                    showResult('authResult', `✅ Login Successful! Token: ${data.token.substring(0, 20)}...`, 'success');
+                } else {
+                    showResult('authResult', `❌ Login Failed: ${data.message}`, 'error');
+                }
+            } catch (error) {
+                showResult('authResult', `❌ Login Error: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testProtectedRoute() {
+            try {
+                if (!authToken) {
+                    showResult('authResult', '⚠️ Please login first', 'error');
+                    return;
+                }
+                
+                const response = await fetch(`/api/contacts?token=${authToken}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    showResult('authResult', `✅ Protected Route Access: ${data.length} contacts found`, 'success');
+                } else {
+                    showResult('authResult', `❌ Protected Route Error: ${response.status}`, 'error');
+                }
+            } catch (error) {
+                showResult('authResult', `❌ Protected Route Error: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testEmail() {
+            try {
+                const response = await fetch('/api/health');
+                showResult('emailResult', '📧 Email configuration test - check server logs for email status', 'info');
+            } catch (error) {
+                showResult('emailResult', `❌ Email Test Error: ${error.message}`, 'error');
+            }
+        }
+    </script>
+</body>
+</html>

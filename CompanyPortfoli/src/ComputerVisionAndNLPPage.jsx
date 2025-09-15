@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { MousePointer2, MessageSquare, Image, CheckCircle2, ArrowRight, Target, Users, Brain, Zap, Home, TrendingUp } from "lucide-react";
+import { MousePointer2, CheckCircle2, ArrowRight, Home } from "lucide-react";
 
 const GradientText = ({ children }) => (
   <span className="bg-gradient-to-r from-indigo-400 via-violet-400 to-fuchsia-400 bg-clip-text text-transparent">{children}</span>
@@ -15,29 +15,20 @@ const CardContent = ({ className = "", children }) => (
   <div className={`p-6 ${className}`}>{children}</div>
 );
 
-const Feature = ({ icon: Icon, title, desc, features }) => (
-  <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
-    <Card className="group relative h-full overflow-hidden p-0">
-      <div className="absolute -inset-1 rounded-3xl bg-gradient-to-tr from-indigo-500/20 via-fuchsia-500/20 to-blue-500/20 opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100" />
-      <CardContent className="relative z-10">
-        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/10">
-          <Icon className="h-6 w-6 text-white" />
-        </div>
-        <h3 className="mt-4 text-xl font-semibold text-white">{title}</h3>
-        <p className="mt-2 text-sm text-white/70">{desc}</p>
-        {features && (
-          <ul className="mt-4 space-y-2">
-            {features.map((feature, index) => (
-              <li key={index} className="flex items-center gap-2 text-xs text-white/60">
-                <CheckCircle2 className="h-3 w-3 text-green-400" />
-                {feature}
-              </li>
-            ))}
-          </ul>
-        )}
-      </CardContent>
-    </Card>
-  </motion.div>
+const Feature = ({ title, points }) => (
+  <Card>
+    <CardContent>
+      <h4 className="text-lg font-semibold text-white">{title}</h4>
+      <ul className="mt-3 space-y-2">
+        {points.map((p, i) => (
+          <li key={i} className="flex items-start gap-2 text-sm text-white/70">
+            <CheckCircle2 className="mt-0.5 h-4 w-4 text-green-400" />
+            <span>{p}</span>
+          </li>
+        ))}
+      </ul>
+    </CardContent>
+  </Card>
 );
 
 export default function ComputerVisionNLPPage() {
@@ -66,81 +57,59 @@ export default function ComputerVisionNLPPage() {
         </div>
       </section>
 
-      {/* Services Overview */}
+      {/* Business Value Section */}
       <section className="mx-auto max-w-7xl px-6 py-16">
         <div className="mx-auto max-w-3xl text-center">
-          <h2 className="text-3xl font-bold md:text-4xl">Our <GradientText>Capabilities</GradientText></h2>
-          <p className="mt-3 text-white/70">Modern CV and NLP systems that are accurate, scalable, and interpretable.</p>
+          <h2 className="text-3xl font-bold md:text-4xl">How <GradientText>CV & NLP</GradientText> Drive Business Value</h2>
+          <p className="mt-3 text-white/70">A strong CV and NLP framework empowers businesses to tackle complex challenges, adapt to diverse use cases, and deliver scalable, accurate, and resilient solutions. By combining visual intelligence with language understanding, organizations can unlock new opportunities across industries.</p>
         </div>
-        <div className="mt-10 grid gap-6 md:grid-cols-2">
-          <Feature 
-            icon={Image}
-            title="Computer Vision"
-            desc="Detect, classify, and understand images and video across diverse contexts."
-            features={[
-              "Image classification and tagging",
-              "Object detection and tracking",
-              "OCR and document processing",
-              "Quality inspection"
+
+        <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <Feature
+            title="Retail & E‑commerce"
+            points={[
+              "CV: Automated product tagging, visual search, quality inspection.",
+              "NLP: Personalized recommendations, smarter search, AI chatbots."
             ]}
           />
-          <Feature 
-            icon={MessageSquare}
-            title="Natural Language"
-            desc="Extract meaning from text and power conversational experiences."
-            features={[
-              "Text classification and NER",
-              "Summarization and Q&A",
-              "Semantic search and RAG",
-              "Chatbots and assistants"
+          <Feature
+            title="Healthcare"
+            points={[
+              "CV: Medical image analysis for diagnostics and anomaly detection.",
+              "NLP: Patient data summarization, clinical notes, virtual assistants."
+            ]}
+          />
+          <Feature
+            title="Manufacturing"
+            points={[
+              "CV: Defect detection, predictive maintenance, real-time monitoring.",
+              "NLP: Smart documentation workflows and compliance reporting."
+            ]}
+          />
+          <Feature
+            title="Financial Services"
+            points={[
+              "CV: Identity verification via document and facial recognition.",
+              "NLP: Fraud detection, automated service, risk from unstructured data."
+            ]}
+          />
+          <Feature
+            title="Media & Entertainment"
+            points={[
+              "CV: Content moderation and tagging at scale.",
+              "NLP: Captioning, summarization, personalized recommendations."
+            ]}
+          />
+          <Feature
+            title="Enterprise & Knowledge Work"
+            points={[
+              "CV: OCR and document digitization for unstructured archives.",
+              "NLP: Knowledge retrieval, semantic search, AI copilots."
             ]}
           />
         </div>
       </section>
 
-      {/* Benefits Section */}
-      <section className="mx-auto max-w-7xl px-6 py-16">
-        <div className="grid items-center gap-10 md:grid-cols-2">
-          <div>
-            <h3 className="text-2xl font-semibold md:text-3xl">Why <GradientText>Choose Us</GradientText>?</h3>
-            <ul className="mt-6 space-y-3 text-white/80">
-              <li className="flex items-center gap-3">
-                <Target className="h-5 w-5 text-green-400" />
-                <span>Production-grade pipelines and monitoring</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <TrendingUp className="h-5 w-5 text-blue-400" />
-                <span>Measurable business impact and KPIs</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <Users className="h-5 w-5 text-purple-400" />
-                <span>Human-in-the-loop workflows where needed</span>
-              </li>
-            </ul>
-          </div>
-          <div className="space-y-4">
-            <Card>
-              <CardContent>
-                <h4 className="text-lg font-semibold text-white">Typical Use Cases</h4>
-                <div className="mt-4 space-y-3">
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-400" />
-                    <span className="text-white/70">Document automation and OCR</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-400" />
-                    <span className="text-white/70">Content moderation and tagging</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-400" />
-                    <span className="text-white/70">Search and knowledge retrieval</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
 
       {/* CTA Section */}
       <section className="relative mx-auto max-w-7xl overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-tr from-indigo-600/20 via-fuchsia-600/10 to-sky-600/20 px-6 py-16">
@@ -152,14 +121,12 @@ export default function ComputerVisionNLPPage() {
             <Link to="/contact" className="inline-flex items-center justify-center px-6 py-3 text-base font-medium bg-indigo-600 text-white rounded-2xl hover:bg-indigo-500 transition-colors">
               <MousePointer2 className="mr-2 h-5 w-5" /> Start Now
             </Link>
-            <button className="inline-flex items-center justify-center px-6 py-3 text-base font-medium bg-white/10 text-white rounded-2xl hover:bg-white/20 transition-colors">
+            <Link to="/case-studies" className="inline-flex items-center justify-center px-6 py-3 text-base font-medium bg-white/10 text-white rounded-2xl hover:bg-white/20 transition-colors">
               <ArrowRight className="mr-2 h-5 w-5" /> Learn More
-            </button>
+            </Link>
           </div>
         </div>
       </section>
     </div>
   );
 }
-
-

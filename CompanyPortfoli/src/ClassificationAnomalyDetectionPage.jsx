@@ -125,9 +125,9 @@ export default function ClassificationAnomalyDetectionPage() {
             <Link to="/contact" className="inline-flex items-center justify-center px-6 py-3 text-base font-medium bg-indigo-600 text-white rounded-2xl hover:bg-indigo-500 transition-colors">
               <Shield className="mr-2 h-5 w-5" /> Start Detection
             </Link>
-            <button className="inline-flex items-center justify-center px-6 py-3 text-base font-medium bg-white/10 text-white rounded-2xl hover:bg-white/20 transition-colors">
+            <Link to="/case-studies" className="inline-flex items-center justify-center px-6 py-3 text-base font-medium bg-white/10 text-white rounded-2xl hover:bg-white/20 transition-colors">
               <ArrowRight className="mr-2 h-5 w-5" /> Learn More
-            </button>
+            </Link>
           </div>
         </div>
       </section>

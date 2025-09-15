@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Submissions - Admin</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0b0b13;
+            color: white;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #6366f1;
+            margin-bottom: 30px;
+        }
+        .contact-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+        .contact-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .contact-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #6366f1;
+        }
+        .contact-date {
+            color: #9ca3af;
+            font-size: 14px;
+        }
+        .contact-email {
+            color: #60a5fa;
+            margin-bottom: 10px;
+        }
+        .contact-company {
+            color: #a78bfa;
+            margin-bottom: 10px;
+        }
+        .contact-message {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid #6366f1;
+            white-space: pre-wrap;
+        }
+        .loading {
+            text-align: center;
+            color: #9ca3af;
+        }
+        .error {
+            color: #ef4444;
+            text-align: center;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 32px;
+            font-weight: bold;
+            color: #6366f1;
+        }
+        .stat-label {
+            color: #9ca3af;
+            margin-top: 5px;
+        }
+        .clear-button {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 20px;
+        }
+        .clear-button:hover {
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            transform: translateY(-1px);
+        }
+        .clear-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .save-button {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .save-button:hover {
+            background: linear-gradient(135deg, #059669, #047857);
+            transform: translateY(-1px);
+        }
+        .save-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .logout-button {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .logout-button:hover {
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            transform: translateY(-1px);
+        }
+        .confirmation-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: #1f2937;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 400px;
+            text-align: center;
+        }
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #ef4444;
+        }
+        .modal-message {
+            color: #9ca3af;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+        .modal-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .modal-btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+        .modal-btn-danger:hover {
+            background: #dc2626;
+        }
+        .modal-btn-cancel {
+            background: #374151;
+            color: white;
+        }
+        .modal-btn-cancel:hover {
+            background: #4b5563;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Contact Submissions Dashboard</h1>
+        
+        <div style="display: flex; gap: 15px; margin-bottom: 20px; justify-content: space-between; align-items: center;">
+            <div style="display: flex; gap: 15px;">
+                <button class="clear-button" onclick="showClearConfirmation()" id="clearBtn">
+                    🗑️ Clear All Data
+                </button>
+                <button class="save-button" onclick="downloadAsNotepad()" id="saveBtn">
+                    📝 Save as Notepad
+                </button>
+            </div>
+            <button class="logout-button" onclick="logout()" id="logoutBtn">
+                🚪 Logout
+            </button>
+        </div>
+
+        <div class="stats" id="stats">
+            <div class="stat-card">
+                <div class="stat-number" id="totalContacts">-</div>
+                <div class="stat-label">Total Submissions</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="todayContacts">-</div>
+                <div class="stat-label">Today's Submissions</div>
+            </div>
+        </div>
+
+        <div id="loading" class="loading">Loading contact submissions...</div>
+        <div id="error" class="error" style="display: none;"></div>
+        <div id="contacts"></div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div class="confirmation-modal" id="confirmationModal">
+        <div class="modal-content">
+            <div class="modal-title">⚠️ Clear All Data</div>
+            <div class="modal-message">
+                Are you sure you want to delete ALL contact submissions?<br>
+                This action cannot be undone!
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-cancel" onclick="hideClearConfirmation()">
+                    Cancel
+                </button>
+                <button class="modal-btn modal-btn-danger" onclick="clearAllData()">
+                    Yes, Clear All
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get token from URL or localStorage
+        function getAuthToken() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const urlToken = urlParams.get('token');
+            const localToken = localStorage.getItem('adminToken');
+            
+            // If we have a token from URL, store it in localStorage
+            if (urlToken && !localToken) {
+                localStorage.setItem('adminToken', urlToken);
+            }
+            
+            return urlToken || localToken;
+        }
+        
+        // Check authentication
+        function checkAuth() {
+            const token = getAuthToken();
+            if (!token) {
+                window.location.href = '/login';
+                return false;
+            }
+            return true;
+        }
+        
+        async function loadContacts() {
+            if (!checkAuth()) return;
+            
+            try {
+                const token = getAuthToken();
+                const response = await fetch(`/api/contacts?token=${token}`);
+                if (!response.ok) throw new Error('Failed to fetch contacts');
+                
+                const contacts = await response.json();
+                
+                // Update stats
+                document.getElementById('totalContacts').textContent = contacts.length;
+                const today = new Date().toDateString();
+                const todayCount = contacts.filter(c => new Date(c.created_at).toDateString() === today).length;
+                document.getElementById('todayContacts').textContent = todayCount;
+                
+                // Display contacts
+                const contactsDiv = document.getElementById('contacts');
+                contactsDiv.innerHTML = '';
+                
+                if (contacts.length === 0) {
+                    contactsDiv.innerHTML = '<div class="contact-card"><p>No contact submissions yet.</p></div>';
+                    return;
+                }
+                
+                contacts.forEach(contact => {
+                    const contactCard = document.createElement('div');
+                    contactCard.className = 'contact-card';
+                    contactCard.innerHTML = `
+                        <div class="contact-header">
+                            <div class="contact-name">${contact.name}</div>
+                            <div class="contact-date">${new Date(contact.created_at).toLocaleString()}</div>
+                        </div>
+                        <div class="contact-email">📧 ${contact.email}</div>
+                        ${contact.company ? `<div class="contact-company">🏢 ${contact.company}</div>` : ''}
+                        <div class="contact-message">${contact.message}</div>
+                    `;
+                    contactsDiv.appendChild(contactCard);
+                });
+                
+                document.getElementById('loading').style.display = 'none';
+                
+            } catch (error) {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('error').style.display = 'block';
+                document.getElementById('error').textContent = 'Error loading contacts: ' + error.message;
+            }
+        }
+        
+        // Load contacts on page load
+        loadContacts();
+        
+        // Refresh every 30 seconds (only if page is visible)
+        let refreshInterval;
+        function startRefresh() {
+            refreshInterval = setInterval(() => {
+                if (!document.hidden) {
+                    loadContacts();
+                }
+            }, 30000);
+        }
+        
+        function stopRefresh() {
+            if (refreshInterval) {
+                clearInterval(refreshInterval);
+            }
+        }
+        
+        // Handle page visibility changes
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                stopRefresh();
+            } else {
+                startRefresh();
+            }
+        });
+        
+        // Start refresh timer
+        startRefresh();
+        
+        // Clear all data functions
+        function showClearConfirmation() {
+            document.getElementById('confirmationModal').style.display = 'flex';
+        }
+        
+        function hideClearConfirmation() {
+            document.getElementById('confirmationModal').style.display = 'none';
+        }
+        
+        async function clearAllData() {
+            if (!checkAuth()) return;
+            
+            const clearBtn = document.getElementById('clearBtn');
+            clearBtn.disabled = true;
+            clearBtn.textContent = '🗑️ Clearing...';
+            
+            try {
+                const token = getAuthToken();
+                const response = await fetch(`/api/contacts?token=${token}`, {
+                    method: 'DELETE'
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to clear data');
+                }
+                
+                const result = await response.json();
+                
+                // Hide modal and reload data
+                hideClearConfirmation();
+                loadContacts();
+                
+                // Show success message
+                alert(`✅ ${result.message}`);
+                
+            } catch (error) {
+                alert(`❌ Error: ${error.message}`);
+            } finally {
+                clearBtn.disabled = false;
+                clearBtn.textContent = '🗑️ Clear All Data';
+            }
+        }
+        
+        // Close modal when clicking outside
+        document.getElementById('confirmationModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                hideClearConfirmation();
+            }
+        });
+        
+        // Download as notepad function
+        async function downloadAsNotepad() {
+            if (!checkAuth()) return;
+            
+            const saveBtn = document.getElementById('saveBtn');
+            saveBtn.disabled = true;
+            saveBtn.textContent = '📝 Generating...';
+            
+            try {
+                const token = getAuthToken();
+                const response = await fetch(`https://datascience-solutions-production.up.railway.app/api/contacts?token=${token}`);
+                if (!response.ok) throw new Error('Failed to fetch contacts');
+                
+                const contacts = await response.json();
+                
+                if (contacts.length === 0) {
+                    alert('📝 No data to save. The database is empty.');
+                    return;
+                }
+                
+                // Generate notepad content
+                const currentDate = new Date().toLocaleString();
+                let notepadContent = `CONTACT SUBMISSIONS REPORT\n`;
+                notepadContent += `Generated on: ${currentDate}\n`;
+                notepadContent += `Total Submissions: ${contacts.length}\n`;
+                notepadContent += `========================================\n\n`;
+                
+                contacts.forEach((contact, index) => {
+                    notepadContent += `SUBMISSION #${index + 1}\n`;
+                    notepadContent += `----------------------------------------\n`;
+                    notepadContent += `Name: ${contact.name}\n`;
+                    notepadContent += `Email: ${contact.email}\n`;
+                    notepadContent += `Company: ${contact.company || 'Not provided'}\n`;
+                    notepadContent += `Message: ${contact.message}\n`;
+                    notepadContent += `Submitted: ${contact.created_at}\n`;
+                    notepadContent += `\n`;
+                });
+                
+                // Create and download file
+                const blob = new Blob([notepadContent], { type: 'text/plain' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `contact_submissions_${new Date().toISOString().split('T')[0]}.txt`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+                
+                alert(`✅ Notepad file downloaded successfully!\n📁 File: contact_submissions_${new Date().toISOString().split('T')[0]}.txt`);
+                
+            } catch (error) {
+                alert(`❌ Error generating notepad: ${error.message}`);
+            } finally {
+                saveBtn.disabled = false;
+                saveBtn.textContent = '📝 Save as Notepad';
+            }
+        }
+        
+        // Logout function
+        async function logout() {
+            try {
+                const token = getAuthToken();
+                await fetch('/api/logout', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+            } catch (error) {
+                console.error('Logout error:', error);
+            } finally {
+                // Clear local storage and redirect
+                localStorage.removeItem('adminToken');
+                window.location.href = '/login';
+            }
+        }
+    </script>
+</body>
+</html>

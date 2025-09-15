@@ -18,9 +18,10 @@ const CardContent = ({ className = "", children }) => (
 export default function ContactPage() {
   const [formData, setFormData] = useState({ name: "", email: "", company: "", message: "" });
   const [status, setStatus] = useState({ state: "idle", message: "" });
+  const [fieldErrors, setFieldErrors] = useState({});
 
-  // Replace with your Formspree endpoint, e.g. https://formspree.io/f/xxxxxxx
-  const FORMSPREE_ENDPOINT = "";
+  // API endpoint: use Vercel/Railway provided base URL
+  const API_ENDPOINT = `${import.meta.env.VITE_API_BASE_URL}/api/contact`;
 
   const onChange = (e) => {
     const { name, value } = e.target;
@@ -28,11 +29,26 @@ export default function ContactPage() {
   };
 
   const validate = () => {
-    const { name, email, message } = formData;
-    if (!name.trim() || !email.trim() || !message.trim()) return "Please fill in name, email, and message.";
+    const errors = {};
+    const name = formData.name.trim();
+    const email = formData.email.trim();
+    const company = (formData.company || '').trim();
+    const message = formData.message.trim();
     const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    if (!emailOk) return "Please enter a valid email address.";
-    return "";
+
+    if (!name) errors.name = "Name is required";
+    else if (name.length < 2 || name.length > 100) errors.name = "Name must be 2-100 characters";
+
+    if (!email) errors.email = "Email is required";
+    else if (!emailOk || email.length > 254) errors.email = "Enter a valid email";
+
+    if (company && company.length > 150) errors.company = "Company is too long";
+
+    if (!message) errors.message = "Message is required";
+    else if (message.length < 10 || message.length > 5000) errors.message = "Message must be 10-5000 characters";
+
+    setFieldErrors(errors);
+    return Object.keys(errors).length ? "Please fix the highlighted fields." : "";
   };
 
   const onSubmit = async (e) => {
@@ -43,23 +59,37 @@ export default function ContactPage() {
       return;
     }
     setStatus({ state: "submitting", message: "" });
+    
     try {
-      if (!FORMSPREE_ENDPOINT) {
-        await new Promise((r) => setTimeout(r, 800));
-        setStatus({ state: "success", message: "Your request has been recorded (demo). Configure email to enable sending." });
-        setFormData({ name: "", email: "", company: "", message: "" });
-        return;
-      }
-      const res = await fetch(FORMSPREE_ENDPOINT, {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+      
+      const res = await fetch(API_ENDPOINT, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
+        signal: controller.signal
       });
-      if (!res.ok) throw new Error("Failed to send. Please try again.");
-      setStatus({ state: "success", message: "Thanks! We've received your request." });
+      
+      clearTimeout(timeoutId);
+      const data = await res.json();
+      
+      if (!res.ok) {
+        setFieldErrors({});
+        if (data && data.error) {
+          throw new Error(data.error);
+        }
+        throw new Error("Failed to send. Please try again.");
+      }
+      
+      setStatus({ state: "success", message: "Thank you for your request. Our team will get in touch with you shortly" });
       setFormData({ name: "", email: "", company: "", message: "" });
     } catch (error) {
-      setStatus({ state: "error", message: error.message || "Something went wrong." });
+      if (error.name === 'AbortError') {
+        setStatus({ state: "error", message: "Request timed out. Please try again." });
+      } else {
+        setStatus({ state: "error", message: error.message || "Something went wrong. Please try again." });
+      }
     }
   };
 
@@ -92,25 +122,29 @@ export default function ContactPage() {
                 <label className="block text-sm text-white/70 mb-2">Full Name</label>
                 <div className="relative">
                   <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/50" />
-                  <input name="name" value={formData.name} onChange={onChange} placeholder="Jane Doe" className="w-full bg-white/10 border border-white/10 rounded-xl pl-10 pr-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-400" />
+                  <input name="name" value={formData.name} onChange={onChange} placeholder="Jane Doe" className="w-full bg-white/10 border border-white/10 rounded-xl pl-10 pr-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-400" aria-invalid={!!fieldErrors.name} aria-describedby={fieldErrors.name ? 'name-error' : undefined} />
+                  {fieldErrors.name && <div id="name-error" className="mt-1 text-xs text-red-400">{fieldErrors.name}</div>}
                 </div>
               </div>
               <div className="md:col-span-1">
                 <label className="block text-sm text-white/70 mb-2">Email</label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/50" />
-                  <input name="email" type="email" value={formData.email} onChange={onChange} placeholder="jane@company.com" className="w-full bg-white/10 border border-white/10 rounded-xl pl-10 pr-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-400" />
+                  <input name="email" type="email" value={formData.email} onChange={onChange} placeholder="jane@company.com" className="w-full bg-white/10 border border-white/10 rounded-xl pl-10 pr-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-400" aria-invalid={!!fieldErrors.email} aria-describedby={fieldErrors.email ? 'email-error' : undefined} />
+                  {fieldErrors.email && <div id="email-error" className="mt-1 text-xs text-red-400">{fieldErrors.email}</div>}
                 </div>
               </div>
               <div className="md:col-span-2">
                 <label className="block text-sm text-white/70 mb-2">Company (optional)</label>
-                <input name="company" value={formData.company} onChange={onChange} placeholder="Acme Inc." className="w-full bg-white/10 border border-white/10 rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-400" />
+                <input name="company" value={formData.company} onChange={onChange} placeholder="Acme Inc." className="w-full bg-white/10 border border-white/10 rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-400" aria-invalid={!!fieldErrors.company} aria-describedby={fieldErrors.company ? 'company-error' : undefined} />
+                {fieldErrors.company && <div id="company-error" className="mt-1 text-xs text-red-400">{fieldErrors.company}</div>}
               </div>
               <div className="md:col-span-2">
                 <label className="block text-sm text-white/70 mb-2">Project Details</label>
                 <div className="relative">
                   <MessageSquare className="absolute left-3 top-3 h-4 w-4 text-white/50" />
-                  <textarea name="message" value={formData.message} onChange={onChange} rows={6} placeholder="Scope, goals, timeline, budget, links..." className="w-full bg-white/10 border border-white/10 rounded-xl pl-10 pr-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-400" />
+                  <textarea name="message" value={formData.message} onChange={onChange} rows={6} placeholder="Scope, goals, timeline, budget, links..." className="w-full bg-white/10 border border-white/10 rounded-xl pl-10 pr-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-400" aria-invalid={!!fieldErrors.message} aria-describedby={fieldErrors.message ? 'message-error' : undefined} />
+                  {fieldErrors.message && <div id="message-error" className="mt-1 text-xs text-red-400">{fieldErrors.message}</div>}
                 </div>
               </div>
               <div className="md:col-span-2 flex items-center justify-between gap-3 flex-wrap">

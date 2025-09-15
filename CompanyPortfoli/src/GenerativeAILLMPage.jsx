@@ -66,46 +66,12 @@ export default function GenerativeAILLMPage() {
         </div>
       </section>
 
-      {/* Services Overview */}
+      {/* Transform Your Business (moved up) */}
       <section className="mx-auto max-w-7xl px-6 py-16">
         <div className="mx-auto max-w-3xl text-center">
-          <h2 className="text-3xl font-bold md:text-4xl">Our <GradientText>Generative AI</GradientText> Solutions</h2>
-          <p className="mt-3 text-white/70">Cutting-edge language models and generative technologies for content creation and automation.</p>
+          <h3 className="text-2xl font-semibold md:text-3xl">Generative AI & <GradientText>LLMs</GradientText> Transform Your Business</h3>
+          <p className="mt-3 text-white/70">From automation to creativity, modern language models unlock new ways to build, operate, and scale with measurable impact.</p>
         </div>
-        
-        <div className="mt-10 grid gap-6 md:grid-cols-2">
-          <Feature 
-            icon={Bot} 
-            title="Large Language Models" 
-            desc="Advanced LLM integration and fine-tuning for custom applications and business-specific use cases."
-            features={[
-              "GPT and Claude model integration",
-              "Custom model fine-tuning",
-              "Prompt engineering optimization",
-              "Multi-modal AI capabilities"
-            ]}
-          />
-          <Feature 
-            icon={Sparkles} 
-            title="Content Generation" 
-            desc="AI-powered content creation for text, images, and multimedia to accelerate your creative processes."
-            features={[
-              "Automated content writing",
-              "Image and video generation",
-              "Code generation and review",
-              "Creative ideation and brainstorming"
-            ]}
-          />
-        </div>
-      </section>
-
-      {/* Use Cases */}
-      <section className="mx-auto max-w-7xl px-6 py-16">
-        <div className="mx-auto max-w-3xl text-center">
-          <h3 className="text-2xl font-semibold md:text-3xl">Transform Your <GradientText>Business</GradientText></h3>
-          <p className="mt-3 text-white/70">Our generative AI solutions are revolutionizing how businesses create, communicate, and operate.</p>
-        </div>
-        
         <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           <Card>
             <CardContent>
@@ -116,7 +82,6 @@ export default function GenerativeAILLMPage() {
               <p className="text-white/70 text-sm">Intelligent chatbots and automated responses for 24/7 customer service.</p>
             </CardContent>
           </Card>
-          
           <Card>
             <CardContent>
               <div className="flex items-center gap-3 mb-4">
@@ -126,7 +91,6 @@ export default function GenerativeAILLMPage() {
               <p className="text-white/70 text-sm">Automated blog posts, social media content, and marketing copy generation.</p>
             </CardContent>
           </Card>
-          
           <Card>
             <CardContent>
               <div className="flex items-center gap-3 mb-4">
@@ -136,7 +100,6 @@ export default function GenerativeAILLMPage() {
               <p className="text-white/70 text-sm">AI-assisted coding, code review, and automated testing solutions.</p>
             </CardContent>
           </Card>
-          
           <Card>
             <CardContent>
               <div className="flex items-center gap-3 mb-4">
@@ -146,7 +109,6 @@ export default function GenerativeAILLMPage() {
               <p className="text-white/70 text-sm">Natural language queries and automated insights from your data.</p>
             </CardContent>
           </Card>
-          
           <Card>
             <CardContent>
               <div className="flex items-center gap-3 mb-4">
@@ -156,7 +118,6 @@ export default function GenerativeAILLMPage() {
               <p className="text-white/70 text-sm">Personalized learning experiences and automated training content.</p>
             </CardContent>
           </Card>
-          
           <Card>
             <CardContent>
               <div className="flex items-center gap-3 mb-4">
@@ -169,6 +130,22 @@ export default function GenerativeAILLMPage() {
         </div>
       </section>
 
+      {/* Why Choose Us */}
+      <section className="mx-auto max-w-7xl px-6 py-8">
+        <div className="mx-auto max-w-3xl text-center">
+          <h3 className="text-2xl font-semibold md:text-3xl">Why <GradientText>Choose Us</GradientText>?</h3>
+          <div className="mt-6 grid gap-3 text-left md:grid-cols-2">
+            <div className="flex items-start gap-3 text-white/80"><span className="text-indigo-400">⚡</span><span>Tailored Solutions – We translate diverse business use cases into high‑performing Generative AI & LLM frameworks.</span></div>
+            <div className="flex items-start gap-3 text-white/80"><span className="text-indigo-400">⚡</span><span>Robust & Scalable – Built to handle complex data, technical challenges, and real‑world scale.</span></div>
+            <div className="flex items-start gap-3 text-white/80"><span className="text-indigo-400">⚡</span><span>High Accuracy – Advanced fine‑tuning for precise, business‑relevant outputs.</span></div>
+            <div className="flex items-start gap-3 text-white/80"><span className="text-indigo-400">⚡</span><span>Measurable ROI – Frameworks designed to directly impact business KPIs.</span></div>
+            <div className="flex items-start gap-3 text-white/80 md:col-span-2"><span className="text-indigo-400">⚡</span><span>Adaptive & Secure – Continuous improvement with safe, ethical, and human‑in‑the‑loop workflows.</span></div>
+          </div>
+        </div>
+      </section>
+
+      
+
       {/* CTA Section */}
       <section className="relative mx-auto max-w-7xl overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-tr from-indigo-600/20 via-fuchsia-600/10 to-sky-600/20 px-6 py-16">
         <div className="absolute -inset-1 -z-10 bg-[radial-gradient(800px_400px_at_90%_10%,rgba(99,102,241,0.20),transparent)]" />
@@ -179,9 +156,9 @@ export default function GenerativeAILLMPage() {
             <Link to="/contact" className="inline-flex items-center justify-center px-6 py-3 text-base font-medium bg-indigo-600 text-white rounded-2xl hover:bg-indigo-500 transition-colors">
               <Sparkles className="mr-2 h-5 w-5" /> Start Generating
             </Link>
-            <button className="inline-flex items-center justify-center px-6 py-3 text-base font-medium bg-white/10 text-white rounded-2xl hover:bg-white/20 transition-colors">
+            <Link to="/case-studies" className="inline-flex items-center justify-center px-6 py-3 text-base font-medium bg-white/10 text-white rounded-2xl hover:bg-white/20 transition-colors">
               <ArrowRight className="mr-2 h-5 w-5" /> Learn More
-            </button>
+            </Link>
           </div>
         </div>
       </section>

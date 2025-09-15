@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Test - Vishnu Labs</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0b0b13;
+            color: white;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .test-section {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .test-button {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .test-button:hover {
+            background: linear-gradient(135deg, #5b21b6, #7c3aed);
+        }
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        .success {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: #86efac;
+        }
+        .error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+        }
+        .info {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: #93c5fd;
+        }
+        .warning {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            color: #fbbf24;
+        }
+        .step {
+            margin: 10px 0;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 8px;
+            border-left: 4px solid #6366f1;
+        }
+        .config-form {
+            background: rgba(255, 255, 255, 0.02);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        .config-form input {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📧 Email Configuration Test</h1>
+        
+        <div class="test-section">
+            <h3>⚠️ Current Status</h3>
+            <div class="warning">
+                <strong>Email is NOT working!</strong><br>
+                Server logs show: "Invalid login: 535-5.7.8 Username and Password not accepted"<br>
+                This means Gmail App Password is not configured.
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h3>🔧 Quick Fix</h3>
+            <div class="step">
+                <strong>Step 1:</strong> Go to <a href="https://myaccount.google.com/apppasswords" target="_blank" style="color: #6366f1;">Google App Passwords</a>
+            </div>
+            <div class="step">
+                <strong>Step 2:</strong> Generate App Password for "Mail" → "Other (custom name)" → "Vishnu Labs"
+            </div>
+            <div class="step">
+                <strong>Step 3:</strong> Copy the 16-character password (e.g., abcd efgh ijkl mnop)
+            </div>
+            <div class="step">
+                <strong>Step 4:</strong> Update server/index.js line 21 with your App Password
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h3>🧪 Test Email</h3>
+            <button class="test-button" onclick="testEmailSend()">Send Test Email</button>
+            <button class="test-button" onclick="checkEmailConfig()">Check Email Config</button>
+            <div id="emailResult" class="result" style="display: none;"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>📊 Database Status</h3>
+            <div class="info">
+                ✅ <strong>Database is working perfectly!</strong><br>
+                All contact form submissions are being saved.<br>
+                You can view them in the admin dashboard.
+            </div>
+            <button class="test-button" onclick="viewDatabase()">View Database</button>
+        </div>
+        
+        <div class="test-section">
+            <h3>🔗 Quick Links</h3>
+            <a href="/login" class="test-button" style="text-decoration: none; display: inline-block;">Login Page</a>
+            <a href="/admin" class="test-button" style="text-decoration: none; display: inline-block;">Admin Dashboard</a>
+            <a href="http://localhost:5173/contact" class="test-button" style="text-decoration: none; display: inline-block;">Contact Form</a>
+        </div>
+    </div>
+
+    <script>
+        function showResult(message, type = 'info') {
+            const element = document.getElementById('emailResult');
+            element.innerHTML = message;
+            element.className = `result ${type}`;
+            element.style.display = 'block';
+        }
+        
+        async function testEmailSend() {
+            showResult('🔄 Sending test email...', 'info');
+            
+            try {
+                const testData = {
+                    name: 'Email Test User',
+                    email: 'test@example.com',
+                    company: 'Email Test Company',
+                    message: 'This is a test email to verify email configuration is working.'
+                };
+                
+                const response = await fetch('/api/contact', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(testData)
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok && data.success) {
+                    showResult(`✅ Test email sent! Check vishnupqw@gmail.com for the email.<br><br>Response: ${JSON.stringify(data, null, 2)}`, 'success');
+                } else {
+                    showResult(`❌ Email failed: ${data.error || 'Unknown error'}`, 'error');
+                }
+            } catch (error) {
+                showResult(`❌ Test failed: ${error.message}`, 'error');
+            }
+        }
+        
+        async function checkEmailConfig() {
+            showResult('🔄 Checking email configuration...', 'info');
+            
+            try {
+                const response = await fetch('/api/health');
+                const data = await response.json();
+                
+                showResult(`📧 Email configuration check:<br><br>Server Status: ${data.status}<br>Timestamp: ${data.timestamp}<br><br>Note: Check server logs for email-specific errors.`, 'info');
+            } catch (error) {
+                showResult(`❌ Config check failed: ${error.message}`, 'error');
+            }
+        }
+        
+        async function viewDatabase() {
+            showResult('🔄 Checking database...', 'info');
+            
+            try {
+                // First login
+                const loginResponse = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: 'loki', password: 'admin@123' })
+                });
+                
+                const loginData = await loginResponse.json();
+                if (!loginResponse.ok || !loginData.success) {
+                    throw new Error('Login failed');
+                }
+                
+                // Get contacts
+                const contactsResponse = await fetch(`/api/contacts?token=${loginData.token}`);
+                const contactsData = await contactsResponse.json();
+                
+                showResult(`📊 Database Status:<br><br>✅ Database is working!<br>📝 Found ${contactsData.length} contact submissions<br><br>Latest entries:<br>${contactsData.slice(-3).map(c => `• ${c.name} (${c.email}) - ${c.created_at}`).join('<br>')}`, 'success');
+                
+            } catch (error) {
+                showResult(`❌ Database check failed: ${error.message}`, 'error');
+            }
+        }
+    </script>
+</body>
+</html>
