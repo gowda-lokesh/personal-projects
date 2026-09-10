@@ -5,7 +5,6 @@ import { useEffect } from "react"
 export default function SessionCompletionStat() {
   useEffect(() => {
     const update = () => {
-      // Only target the strength-session stats row, not the Progress tab stats.
       const stats = Array.from(document.querySelectorAll<HTMLElement>(".stats"))
         .find(el => el.textContent?.includes("Logged sets"))
       if (!stats) return
@@ -19,15 +18,18 @@ export default function SessionCompletionStat() {
       const completed = section?.querySelectorAll(".exerciseDone").length ?? 0
       const label = card.querySelector<HTMLElement>("span")
       const value = card.querySelector<HTMLElement>("strong")
+      const nextLabel = "Completed exercises"
+      const nextValue = `${completed} / ${exercises}`
 
-      if (label) label.textContent = "Completed exercises"
-      if (value) value.textContent = `${completed} / ${exercises}`
+      // Avoid writing identical text back into the DOM. Otherwise the observer
+      // would observe its own mutations and continuously rerun this function.
+      if (label?.textContent !== nextLabel) label!.textContent = nextLabel
+      if (value?.textContent !== nextValue) value!.textContent = nextValue
     }
 
     update()
     const observer = new MutationObserver(update)
     observer.observe(document.body, { childList: true, subtree: true })
-
     return () => observer.disconnect()
   }, [])
 
