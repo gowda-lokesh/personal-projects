@@ -1,5 +1,6 @@
 import './globals.css'
 import type { Metadata, Viewport } from 'next'
+import SessionCompletionStat from '../components/SessionCompletionStat'
 
 export const metadata: Metadata = {
   title: 'Fitness Tracker',
@@ -15,5 +16,5 @@ export const viewport: Viewport = {
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return <html lang="en"><body>{children}</body></html>
+  return <html lang="en"><body>{children}<SessionCompletionStat /></body></html>
 }
