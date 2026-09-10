@@ -1,0 +1,16 @@
+/* Consistent application typography */
+:root{--font-size-body:14px;--font-size-label:11px;--font-size-small:12px;--font-size-title:18px}
+html,body{font-size:var(--font-size-body);line-height:1.45}
+body{font-family:var(--font-inter),ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+.brand{font-size:19px;line-height:1.2;font-weight:750;letter-spacing:-.45px}.top>div>.muted{font-size:13px;line-height:1.25}
+.pill{font-size:13px;line-height:1;padding:9px 12px;font-weight:650}.iconBtn{font-size:13px}
+.hero h1{font-size:30px;line-height:1.08;font-weight:750;letter-spacing:-.8px}.hero p{font-size:14px;line-height:1.45}.eyebrow{font-size:10px;line-height:1.2;font-weight:750;letter-spacing:1.4px}
+.btn{font-size:13px;line-height:1.2;font-weight:650}.btn.small{font-size:12px;font-weight:650}
+.stats>div{min-height:65px;padding:12px 15px}.stats span{font-size:11px;line-height:1.25;font-weight:500}.stats strong{font-size:18px;line-height:1.2;font-weight:700;letter-spacing:-.25px}
+.field label,.pickerLabel,.progressControls label{font-size:11px;line-height:1.2;font-weight:700;letter-spacing:.9px}input,select,textarea{font-size:14px;line-height:1.3}
+.sectionTitle h2{font-size:18px;line-height:1.25;font-weight:700;letter-spacing:-.35px}.formBlock h3,.exerciseLibrary h3{font-size:14px;line-height:1.3;font-weight:700}.formBlock p{font-size:13px;line-height:1.45}
+.workoutChip{font-size:13px;line-height:1.2;font-weight:650}.workoutMenu button{font-size:13px;line-height:1.25;font-weight:600}
+.exerciseNameRow h2{font-size:17px;line-height:1.25;font-weight:700;letter-spacing:-.3px}.exerciseMeta{font-size:12px;line-height:1.35}.exerciseProgress{font-size:12px;line-height:1.2;font-weight:700}
+.setTableHead{font-size:10px;line-height:1.2;font-weight:700;letter-spacing:.9px}.setNo{font-size:12px;font-weight:700}.setInputCell input{font-size:14px;line-height:1.2}.setInputCell span{font-size:11px;line-height:1.2}.setAction{font-size:12px}.loggedBadge,.textBtn,.lockedLabel{font-size:12px;line-height:1.2}.addSet{font-size:12px;line-height:1.2;font-weight:650}.exerciseDone{font-size:13px;line-height:1.3}.exerciseDone span{font-size:11px;line-height:1.3}
+.notice{font-size:13px;line-height:1.4}.libraryItem strong{font-size:13px;line-height:1.25}.libraryItem small{font-size:11px;line-height:1.25}.emptyState h2{font-size:18px;line-height:1.25}.emptyState p,.emptyMini{font-size:13px;line-height:1.45}.listRow strong{font-size:13px;line-height:1.25}.listRow small{font-size:11px;line-height:1.3}.rangeTabs button{font-size:12px;line-height:1.2;font-weight:650}.progressDate,.progressRow>strong{font-size:11px;line-height:1.2}.loadingBlock{font-size:13px;line-height:1.4}
+@media(max-width:650px){.shell{padding:16px}.top{gap:12px;margin-bottom:16px}.brand{font-size:18px}.top>div>.muted{font-size:12px}.nav{gap:5px}.pill{font-size:12px;padding:8px 9px}.hero{padding:21px;border-radius:18px}.hero h1{font-size:25px}.hero p{font-size:13px}.stats>div{padding:11px 13px}.stats strong{font-size:17px}.controlCard{gap:12px}}
